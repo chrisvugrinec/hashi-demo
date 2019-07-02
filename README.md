@@ -1,2 +1,2 @@
 # hashi-demo
-Demonstrates creating an Azure infrastructure with AKS using Terraform and implementing a Service Mesh on AKS using Consul
+demo showing Terraform creating Azure Kubernetes Cluster and implement service mesh with Consul 
