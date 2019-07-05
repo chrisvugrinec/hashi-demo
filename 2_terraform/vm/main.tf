@@ -1,24 +1,24 @@
-data "azurerm_resource_group" "vm-rg"{
+data "azurerm_resource_group" "vm-rg" {
   name = "${var.rg}"
 }
 
-data "azurerm_virtual_network" "devopsvnet"{
-  name = "${var.vnet}"
+data "azurerm_virtual_network" "devopsvnet" {
+  name                = "${var.vnet}"
   resource_group_name = "${data.azurerm_resource_group.vm-rg.name}"
-  depends_on = ["data.azurerm_resource_group.vm-rg"]
+  depends_on          = ["data.azurerm_resource_group.vm-rg"]
 }
 
 data "azurerm_subnet" "devopssubnet" {
-  name = "${var.subnet}"
-  resource_group_name = "${data.azurerm_resource_group.vm-rg.name}"
+  name                 = "${var.subnet}"
+  resource_group_name  = "${data.azurerm_resource_group.vm-rg.name}"
   virtual_network_name = "${data.azurerm_virtual_network.devopsvnet.name}"
 }
 
 data "azurerm_key_vault" "devops-kv" {
-  name = "${var.keyvault}"
+  name                = "${var.keyvault}"
   resource_group_name = "${data.azurerm_resource_group.vm-rg.name}"
-  depends_on = ["data.azurerm_resource_group.vm-rg"]
-} 
+  depends_on          = ["data.azurerm_resource_group.vm-rg"]
+}
 
 resource "azurerm_public_ip" "devops-pip" {
   name                    = "${var.hostname}-devops-pip"
@@ -49,8 +49,8 @@ data "azurerm_image" "custom" {
 
 # Put the SSH pub key in Keyvault
 resource "azurerm_key_vault_secret" "devops-kv-secret" {
-  name     = "clientssh"
-  value    = "${var.ssh}"
+  name         = "clientssh"
+  value        = "${var.ssh}"
   key_vault_id = "${data.azurerm_key_vault.devops-kv.id}"
 }
 
@@ -79,16 +79,16 @@ resource "azurerm_virtual_machine" "buildagent" {
   }
 
   os_profile {
-        computer_name  = "buildagent"
-        admin_username = "vagrant"
+    computer_name  = "buildagent"
+    admin_username = "vagrant"
   }
 
   os_profile_linux_config {
-        disable_password_authentication = true
-        ssh_keys {
-            path     = "/home/vagrant/.ssh/authorized_keys"
-            key_data = "${var.ssh}"
-        }
+    disable_password_authentication = true
+    ssh_keys {
+      path     = "/home/vagrant/.ssh/authorized_keys"
+      key_data = "${var.ssh}"
+    }
   }
 }
 

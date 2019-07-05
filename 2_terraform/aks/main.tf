@@ -1,4 +1,4 @@
-data "azurerm_resource_group" "vm-rg"{
+data "azurerm_resource_group" "vm-rg" {
   name = "${var.rg}"
 }
 

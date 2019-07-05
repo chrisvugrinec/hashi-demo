@@ -1,4 +1,4 @@
-data "azurerm_resource_group" "network-rg"{
+data "azurerm_resource_group" "network-rg" {
   name = "${var.rg}"
 }
 
