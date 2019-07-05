@@ -1,5 +1,5 @@
 resource "random_string" "random-namespace" {
-  length = 10
+  length  = 10
   special = false
 }
 
