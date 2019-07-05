@@ -22,7 +22,7 @@ module "keyvault" {
 module "aks1" {
   source         = "./aks"
   aksname        = "aksdemo1"
-  nodecount      = 3
+  nodecount      = 1
   aksvnet-name   = "aks-vnet1"
   akssubnet-name = "aks-subnet1"
   aksvnet        = "10.1.0.0/16"
