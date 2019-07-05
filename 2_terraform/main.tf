@@ -44,14 +44,3 @@ module "vm1" {
   subnet    = "${var.subnet}"
   keyvault  = "devops-kv-${random_string.random-namespace.result}"
 }
-
-module "vm2" {
-  source    = "./vm"
-  static_ip = "10.0.2.6"
-  ssh       = "${var.SSH}"
-  rg        = "${azurerm_resource_group.rg.name}"
-  hostname  = "buildagent2"
-  vnet      = "${var.vnet}"
-  subnet    = "${var.subnet}"
-  keyvault  = "devops-kv-${random_string.random-namespace.result}"
-}
