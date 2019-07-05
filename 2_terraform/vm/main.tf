@@ -60,6 +60,7 @@ resource "azurerm_virtual_machine" "buildagent" {
   resource_group_name   = "${data.azurerm_resource_group.vm-rg.name}"
   network_interface_ids = ["${azurerm_network_interface.nic.id}"]
   vm_size               = "${var.vm_size}"
+  depends_on            = ["azurerm_key_vault_secret.devops-kv-secret"]
 
 
   # This means the OS Disk will be deleted when Terraform destroys the Virtual Machine
