@@ -4,7 +4,7 @@ data "azurerm_resource_group" "kv-rg"{
 
 # keyvault
 resource "azurerm_key_vault" "devops-kv" {
-  name                        = "${var.keyvault}"
+  name                        = "${var.keyvault-name}"
   location                    = "${data.azurerm_resource_group.kv-rg.location}"
   resource_group_name         = "${data.azurerm_resource_group.kv-rg.name}"
   enabled_for_disk_encryption = true

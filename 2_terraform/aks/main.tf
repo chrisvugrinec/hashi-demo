@@ -17,19 +17,19 @@ resource "azurerm_virtual_network" "aksdemo-mgmthub-vnet" {
 
 # AKS VNET
 resource "azurerm_virtual_network" "aksdemo-aks-vnet" {
-  name                = "aksdemo-aks-vnet"
+  name                = "${var.aksvnet-name}"
   location            = "${data.azurerm_resource_group.vm-rg.location}"
   resource_group_name = "${data.azurerm_resource_group.vm-rg.name}"
-  address_space       = ["10.1.0.0/16"]
+  address_space       = ["${var.aksvnet}"]
 }
 
 # AKS SUBNET
 resource "azurerm_subnet" "aksdemo-aks-subnet" {
-  name                = "aksdemo-aks-subnet"
+  name                = "${var.akssubnet-name}"
   resource_group_name = "${data.azurerm_resource_group.vm-rg.name}"
   # commented out, is deprecated should use: azurerm_subnet_network_security_group_association 
   #network_security_group_id = "${azurerm_network_security_group.aksdemo-aks-nsg.id}"
-  address_prefix       = "10.1.0.0/24"
+  address_prefix       = "${var.akssubnet}"
   virtual_network_name = "${azurerm_virtual_network.aksdemo-aks-vnet.name}"
 }
 
@@ -51,7 +51,7 @@ output "kube_subnet_id" {
 
 # Azure Kubernetes Service (AKS)
 resource "azurerm_kubernetes_cluster" "aksdemo-aks" {
-  name                = "aksdemo-${var.random-string}"
+  name                = "${var.aksname}-${var.random-string}"
   location            = "${data.azurerm_resource_group.vm-rg.location}"
   resource_group_name = "${data.azurerm_resource_group.vm-rg.name}"
   dns_prefix          = "aksagent-aks-${var.random-string}"
@@ -83,7 +83,7 @@ resource "azurerm_container_registry" "aksdemo-acr" {
 
 # MgmtHub VNET Peering to AKS
 resource "azurerm_virtual_network_peering" "aksdemo-mgmthub-peering" {
-  name                         = "mgmthub-to-aks"
+  name                         = "mgmthub-to-${var.aksvnet-name}"
   resource_group_name          = "${data.azurerm_resource_group.vm-rg.name}"
   virtual_network_name         = "${azurerm_virtual_network.aksdemo-mgmthub-vnet.name}"
   remote_virtual_network_id    = "${azurerm_virtual_network.aksdemo-aks-vnet.id}"
@@ -93,7 +93,7 @@ resource "azurerm_virtual_network_peering" "aksdemo-mgmthub-peering" {
 
 # AKS VNET Peering to ManagementHub
 resource "azurerm_virtual_network_peering" "aksdemo-aks-peering" {
-  name                         = "aks-to-mgmthub"
+  name                         = "${var.aksvnet-name}-to-mgmthub"
   resource_group_name          = "${data.azurerm_resource_group.vm-rg.name}"
   virtual_network_name         = "${azurerm_virtual_network.aksdemo-aks-vnet.name}"
   remote_virtual_network_id    = "${azurerm_virtual_network.aksdemo-mgmthub-vnet.id}"
